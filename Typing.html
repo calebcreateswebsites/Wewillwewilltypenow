@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typing Speed Test</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: lightblue;
+            text-align: center;
+            padding: 20px;
+        }
+        #word-display {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        #input-box {
+            font-size: 18px;
+            padding: 10px;
+            width: 300px;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Typing Speed Test</h1>
+    <div id="word-display"></div>
+    <input type="text" id="input-box" placeholder="Start typing..." />
+    <div id="result"></div>
+
+    <script>
+        const words = ["hello", "world", "typing", "speed", "test", "javascript", "coding", "fun"];
+        const wordDisplay = document.getElementById("word-display");
+        const inputBox = document.getElementById("input-box");
+        const result = document.getElementById("result");
+
+        let currentIndex = 0;
+        let correctCount = 0;
+        let mistakes = 0;
+        let timer;
+
+        function startTest() {
+            currentIndex = 0;
+            correctCount = 0;
+            mistakes = 0;
+            result.textContent = "";
+            inputBox.value = "";
+            inputBox.disabled = false;
+            wordDisplay.textContent = words[currentIndex];
+            timer = setTimeout(endTest, 15000);
+        }
+
+        function endTest() {
+            inputBox.disabled = true;
+            const wordsPerMinute = Math.round((correctCount / 15) * 60);
+            result.textContent = `Words per Minute: ${wordsPerMinute}, Mistakes: ${mistakes}`;
+            wordDisplay.textContent = "";
+        }
+
+        inputBox.addEventListener("input", () => {
+            const typed = inputBox.value.trim();
+            if (typed === words[currentIndex]) {
+                correctCount++;
+                currentIndex++;
+                inputBox.value = "";
+                if (currentIndex < words.length) {
+                    wordDisplay.textContent = words[currentIndex];
+                } else {
+                    endTest();
+                }
+            } else if (!words[currentIndex].startsWith(typed)) {
+                mistakes++;
+            }
+        });
+
+        // Start the test when the page loads
+        window.onload = startTest;
+    </script>
+</body>
+</html>
