@@ -34,24 +34,22 @@
     <div id="result"></div>
 
     <script>
-        const words = [
-            "hello", "world", "typing", "speed", "test", "javascript", "coding", "fun",
-            "blue", "background", "poppins", "style", "challenge", "keyboard", "quickly",
-            "apple", "banana", "cherry", "date", "elderberry", "fig", "grape", "honeydew", "kiwi", "lemon",
-            "mango", "nectarine", "orange", "papaya", "peach", "pear", "pineapple", "plum", "raspberry",
-            "strawberry", "tangerine", "watermelon", "blueberry", "blackberry", "cranberry",
-            "coconut", "avocado", "apricot", "guava", "lychee", "pomegranate", "quince", 
-            "cantaloupe", "dragonfruit", "durian", "jackfruit", "passionfruit", "rhubarb", 
-            "starfruit", "fig", "tomato", "carrot", "broccoli", "cucumber", "spinach", "zucchini",
-            "pumpkin", "onion", "garlic", "potato", "beet", "turnip", "radish", "lettuce", 
-            "cauliflower", "kale", "celery", "pea", "chickpea", "lentil", "parsley", "basil",
-            "thyme", "oregano", "mint", "rosemary", "sage", "lavender", "coriander", "dill", 
-            "chive", "bayleaf", "clove", "vanilla", "cinnamon", "cardamom", "nutmeg", "ginger", 
-            "turmeric", "pepper", "paprika", "mustard", "horseradish", "sesame", "sunflower", 
-            "olive", "almond", "walnut", "pecan", "cashew", "macadamia", "hazelnut", "pine", 
-            "cocoa", "coffee", "tea", "honey", "sugar", "maple", "syrup", "chocolate", "butter", 
-            "cheese"
-        ];
+        const words = ["hello", "the", "of", "and", "a", "to", "in", 
+                       "is", "you", "that", "it", "he", "was", "for", 
+                       "on", "are", "as", "with", "his", "they", "I",
+                       "at", "be", "this", "have", "from", "or", "one",
+                       "had", "by", "word", "but", "not", "what",
+                       "all", "were", "we", "when", "your", "can",
+                       "said", "there", "use", "an", "each", "which",
+                       "she", "do", "how", "their", "if", "will", 
+                       "up", "other", "about", "out", "many", "then",
+                       "them", "these", "so", "some", "her", "would",
+                       "make", "like", "him", "into", "time", "has",
+                       "look", "two", "more", "write", "go", "see",
+                       "number", "no", "way", "could", "people", "my", 
+                       "than", "first", "water", "been", "call", "who", 
+                       "oil", "now", "find", "long", "down", "day", "did", 
+                       "get", "come", "made", "may", "part"];
         const wordDisplay = document.getElementById("word-display");
         const inputBox = document.getElementById("input-box");
         const result = document.getElementById("result");
@@ -60,7 +58,6 @@
         let correctCount = 0;
         let mistakes = 0;
         let timer;
-        let interval;
 
         function startTest() {
             currentIndex = 0;
@@ -69,6 +66,35 @@
             result.textContent = "";
             inputBox.value = "";
             inputBox.disabled = false;
+            wordDisplay.textContent = words[currentIndex];
+            timer = setTimeout(endTest, 30000);
+        }
 
-            // Generate an infinite stream of random words
-            interval = setInterval(() => {
+        function endTest() {
+            inputBox.disabled = true;
+            const wordsPerMinute = Math.round((correctCount / 15) * 60);
+            result.textContent = `Words per Minute: ${wordsPerMinute}, Mistakes: ${mistakes}`;
+            wordDisplay.textContent = "";
+        }
+
+        inputBox.addEventListener("input", () => {
+            const typed = inputBox.value.trim();
+            if (typed === words[currentIndex]) {
+                correctCount++;
+                currentIndex++;
+                inputBox.value = "";
+                if (currentIndex < words.length) {
+                    wordDisplay.textContent = words[currentIndex];
+                } else {
+                    endTest();
+                }
+            } else if (!words[currentIndex].startsWith(typed)) {
+                mistakes++;
+            }
+        });
+
+        // Start the test when the page loads
+        window.onload = startTest;
+    </script>
+</body>
+</html>
